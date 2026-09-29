@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { 
-  loadFromLocalStorage, 
+  loadFromLocalStorageAsync, 
   getAllSchedule, 
   createSection 
 } from "@/utils/schedule";
@@ -9,8 +9,11 @@ import {
 export default function Page() {
   const [schedule, setSchedule] = useState(getAllSchedule());
   useEffect(() => {
-    const loadedData = loadFromLocalStorage();
+    async function loadData(){
+    const loadedData = await loadFromLocalStorageAsync();
     setSchedule([...loadedData]);
+    }
+    loadData();
   }, []);
 
   const handleAdd = () => {

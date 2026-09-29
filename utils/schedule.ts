@@ -11,37 +11,57 @@ export interface ScheduleDay {
 
 export let scheduleData: ScheduleDay[] = [];
 
-
-const STORAGE_KEY = "encrypted_schedule_data";
-const SECRET_SALT = "chor_ke_ghar_mei_chori";
-
-export function saveToLocalStorage() {
+const STORAGE_KEY = "compressed_encrypted_schedule";
+const SECRET_SALT = "my_super_secret_salt";
+async function compressData(dataString: string): Promise<string> {
+  const stream = new Blob([dataString]).stream().pipeThrough(new CompressionStream('gzip'));
+  const compressedBlob = await new Response(stream).blob();
+  const buffer = await compressedBlob.arrayBuffer();
+  let binary = '';
+  const bytes = new Uint8Array(buffer);
+  for (let i = 0; i < bytes.byteLength; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  return btoa(binary);
+}
+async function decompressData(base64String: string): Promise<string> {
+  const binary = atob(base64String);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+  
+  const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));
+  const decompressedBlob = await new Response(stream).blob();
+  return await decompressedBlob.text();
+}
+export async function saveToLocalStorageAsync() {
   if (typeof window === "undefined") return;
   try {
     const rawData = JSON.stringify(scheduleData);
     const combined = SECRET_SALT + "::" + rawData;
-    const encrypted = btoa(encodeURIComponent(combined));
-    localStorage.setItem(STORAGE_KEY, encrypted);
+    const compressedAndEncrypted = await compressData(combined);
+    localStorage.setItem(STORAGE_KEY, compressedAndEncrypted);
   } catch (error) {
-    console.error("Failed to save and encrypt data:", error);
+    console.error("Failed to compress and save data:", error);
   }
 }
-
-export function loadFromLocalStorage(): ScheduleDay[] {
+export async function loadFromLocalStorageAsync(): Promise<ScheduleDay[]> {
   if (typeof window === "undefined") return [];
+
   try {
-    const encrypted = localStorage.getItem(STORAGE_KEY);
-    if (!encrypted) return [];
-    const decoded = decodeURIComponent(atob(encrypted));
+    const storedData = localStorage.getItem(STORAGE_KEY);
+    if (!storedData) return [];
+    const decoded = await decompressData(storedData);
     if (!decoded.startsWith(SECRET_SALT)) {
-      console.warn("Data integrity check failed or salt mismatch.");
+      console.warn("Integrity check failed.");
       return [];
     }
     const rawData = decoded.slice(SECRET_SALT.length + 2);
     scheduleData = JSON.parse(rawData);
     return scheduleData;
   } catch (error) {
-    console.error("Failed to decrypt and load data:", error);
+    console.error("Failed to load and decompress data:", error);
     return [];
   }
 }
@@ -57,12 +77,10 @@ export function getDayByNumber(id_day: number): ScheduleDay | undefined {
 export function getSectionById(id_day: number, id_section: number): Lecture | undefined {
   const day = getDayByNumber(id_day);
   if (!day) return undefined;
-  
   return day.sections.find((s) => s.id === id_section);
 }
 
-
-export function createSection(dayNumber: number, newLecture: Omit<Lecture, "id">) {
+export async function createSection(dayNumber: number, newLecture: Omit<Lecture, "id">) {
   let day = getDayByNumber(dayNumber);
 
   if (!day) {
@@ -79,12 +97,11 @@ export function createSection(dayNumber: number, newLecture: Omit<Lecture, "id">
   };
 
   day.sections.push(lectureWithId);
-  
-  saveToLocalStorage();
+  await saveToLocalStorageAsync(); 
   return lectureWithId;
 }
 
-export function deleteScheduleSection(id_day: number, id_section: number) {
+export async function deleteScheduleSection(id_day: number, id_section: number) {
   const day = getDayByNumber(id_day);
   if (!day) return false;
 
@@ -97,12 +114,12 @@ export function deleteScheduleSection(id_day: number, id_section: number) {
 
   const success = day.sections.length < initialLength;
   if (success) {
-    saveToLocalStorage(); 
+    await saveToLocalStorageAsync();
   }
   return success;
 }
 
-export function updateScheduleSection(
+export async function updateScheduleSection(
   id_day: number,
   id_section: number,
   updatedValues: Partial<Lecture>
@@ -111,7 +128,6 @@ export function updateScheduleSection(
   if (!section) return null;
 
   Object.assign(section, updatedValues);
-  
-  saveToLocalStorage(); 
+  await saveToLocalStorageAsync();
   return section;
 }
