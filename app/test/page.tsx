@@ -1,31 +1,27 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { 
+  loadFromLocalStorage, 
   getAllSchedule, 
-  getDayByNumber, 
   createSection 
 } from "@/utils/schedule";
 
 export default function Page() {
   const [schedule, setSchedule] = useState(getAllSchedule());
+  useEffect(() => {
+    const loadedData = loadFromLocalStorage();
+    setSchedule([...loadedData]);
+  }, []);
 
   const handleAdd = () => {
-    createSection(1, { name: "TypeScript Basics", duration: "1hr" });
-    setSchedule([...getAllSchedule()]);
-  };
-
-  const handleFetchOneDay = () => {
-    const day1 = getDayByNumber(1);
-    console.log("Fetched Day 1 data:", day1);
+    createSection(1, { name: "Encrypted State Lecture", duration: "1hr" });
+    setSchedule([...getAllSchedule()]); 
   };
 
   return (
     <main style={{ padding: "20px" }}>
-      <h1>Schedule Viewer</h1>
-      <button onClick={handleAdd}>Add Lecture</button>
-      <button onClick={handleFetchOneDay} style={{ marginLeft: "10px" }}>Log Day 1 to Console</button>
-
-      <h2>Current Schedule Preview:</h2>
+      <h1>Secure LocalStorage Schedule</h1>
+      <button onClick={handleAdd}>Add Lecture (Auto-Encrypted)</button>
       <pre>{JSON.stringify(schedule, null, 2)}</pre>
     </main>
   );

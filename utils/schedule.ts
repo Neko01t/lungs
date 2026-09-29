@@ -11,6 +11,41 @@ export interface ScheduleDay {
 
 export let scheduleData: ScheduleDay[] = [];
 
+
+const STORAGE_KEY = "encrypted_schedule_data";
+const SECRET_SALT = "chor_ke_ghar_mei_chori";
+
+export function saveToLocalStorage() {
+  if (typeof window === "undefined") return;
+  try {
+    const rawData = JSON.stringify(scheduleData);
+    const combined = SECRET_SALT + "::" + rawData;
+    const encrypted = btoa(encodeURIComponent(combined));
+    localStorage.setItem(STORAGE_KEY, encrypted);
+  } catch (error) {
+    console.error("Failed to save and encrypt data:", error);
+  }
+}
+
+export function loadFromLocalStorage(): ScheduleDay[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const encrypted = localStorage.getItem(STORAGE_KEY);
+    if (!encrypted) return [];
+    const decoded = decodeURIComponent(atob(encrypted));
+    if (!decoded.startsWith(SECRET_SALT)) {
+      console.warn("Data integrity check failed or salt mismatch.");
+      return [];
+    }
+    const rawData = decoded.slice(SECRET_SALT.length + 2);
+    scheduleData = JSON.parse(rawData);
+    return scheduleData;
+  } catch (error) {
+    console.error("Failed to decrypt and load data:", error);
+    return [];
+  }
+}
+
 export function getAllSchedule(): ScheduleDay[] {
   return scheduleData;
 }
@@ -18,12 +53,14 @@ export function getAllSchedule(): ScheduleDay[] {
 export function getDayByNumber(id_day: number): ScheduleDay | undefined {
   return scheduleData.find((d) => d.system_given_number === id_day);
 }
+
 export function getSectionById(id_day: number, id_section: number): Lecture | undefined {
   const day = getDayByNumber(id_day);
   if (!day) return undefined;
   
   return day.sections.find((s) => s.id === id_section);
 }
+
 
 export function createSection(dayNumber: number, newLecture: Omit<Lecture, "id">) {
   let day = getDayByNumber(dayNumber);
@@ -42,6 +79,8 @@ export function createSection(dayNumber: number, newLecture: Omit<Lecture, "id">
   };
 
   day.sections.push(lectureWithId);
+  
+  saveToLocalStorage();
   return lectureWithId;
 }
 
@@ -56,7 +95,11 @@ export function deleteScheduleSection(id_day: number, id_section: number) {
     scheduleData = scheduleData.filter((d) => d.system_given_number !== id_day);
   }
 
-  return day.sections.length < initialLength;
+  const success = day.sections.length < initialLength;
+  if (success) {
+    saveToLocalStorage(); 
+  }
+  return success;
 }
 
 export function updateScheduleSection(
@@ -68,5 +111,7 @@ export function updateScheduleSection(
   if (!section) return null;
 
   Object.assign(section, updatedValues);
+  
+  saveToLocalStorage(); 
   return section;
 }
