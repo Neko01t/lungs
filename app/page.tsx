@@ -1,5 +1,5 @@
 "use client";
-
+import { ResourceData } from "@/lib/resources"
 import React, { useState, useEffect } from "react";
 import { LuCalculator, LuBookOpen, LuConstruction, LuExternalLink, LuSparkles } from "react-icons/lu";
 import { MdConstruction } from "react-icons/md";
@@ -20,37 +20,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-const RESOURCES = [
-  {
-    category: "Quick Utilities",
-    description: "Free, handy privacy and utility web tools",
-    links: [
-      { name: "PairDrop", url: "https://pairdrop.net", desc: "Local file sharing in browser" },
-      { name: "TempMail", url: "https://tempmail.net", desc: "Disposable temporary email" },
-      { name: "TempChat", url: "https://tempchat.org", desc: "Encrypted self-destructing chat" },
-    ],
-  },
-  {
-    category: "Learning & Dev",
-    description: "Free platforms to master coding and roadmaps",
-    links: [
-      { name: "The Odin Project", url: "https://www.theodinproject.com", desc: "Full stack open curriculum" },
-      { name: "freeCodeCamp", url: "https://www.freecodecamp.org", desc: "Interactive coding certifications" },
-      { name: "roadmap.sh", url: "https://roadmap.sh", desc: "Community developer roadmaps" },
-    ],
-  },
-  {
-    category: "Developer Tools",
-    description: "Essential tools, documentation & components",
-    links: [
-      { name: "GitHub", url: "https://github.com", desc: "Code hosting & collaboration" },
-      { name: "w3schools", url: "https://www.w3schools.com", desc: "Web development reference" },
-      { name: "Next.js", url: "https://nextjs.org", desc: "React framework for the web" },
-      { name: "shadcn/ui", url: "https://ui.shadcn.com", desc: "Re-usable UI components" },
-      { name: "VS Code", url: "https://code.visualstudio.com", desc: "Code editor" },
-    ],
-  },
-];
 
 export default function AttendancePage() {
   const [mode, setMode] = useState<string>("simple");
@@ -141,7 +110,7 @@ export default function AttendancePage() {
               </DialogHeader>
 
               <div className="space-y-6 pt-4">
-                {RESOURCES.map((group, idx) => (
+                {ResourceData.map((group, idx) => (
                   <div key={idx} className="space-y-2">
                     <h3 className="text-sm font-semibold text-foreground border-b border-border pb-1">
                       {group.category}
