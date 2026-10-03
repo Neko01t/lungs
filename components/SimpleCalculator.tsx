@@ -8,7 +8,8 @@ export default function SimpCalc() {
   const [formData, setFormData] = useState({
     total: "213",
     attended: "170",
-    target: "75"
+    target: "75",
+    plannedSkips: "",
   });
 
   const total = Math.max(0, parseInt(formData.total) || 0);
@@ -29,6 +30,16 @@ export default function SimpCalc() {
     }
   }
 
+  const plannedSkips = Math.max(0, parseInt(formData.plannedSkips) || 0);
+  const futureTotal = total + plannedSkips;
+  const futurePercentage = futureTotal > 0 ? (attended / futureTotal) * 100 : 0;
+  const isFutureAboveTarget = futurePercentage >= target;
+
+  let futureClassesToAttend = 0;
+  if (!isFutureAboveTarget && plannedSkips > 0) {
+    futureClassesToAttend = Math.max(0, Math.ceil((target * futureTotal - 100 * attended) / (100 - target)));
+  }
+  
   const handleIntChange = (field: keyof typeof formData) => (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({
       ...prev,
@@ -120,6 +131,55 @@ export default function SimpCalc() {
             )}
           </div>
         </div>
+
+        {total > 0 && (
+          <details className="group border border-border rounded-none bg-background">
+            <summary className="text-sm font-medium cursor-pointer p-3 select-none flex justify-between items-center text-muted-foreground hover:text-foreground transition-colors">
+              Plan Future Leaves (What-If)
+              <span className="transition-transform duration-200 group-open:rotate-180">
+                <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3.13523 6.15803C3.3241 5.95657 3.64052 5.94637 3.84197 6.13523L7.5 9.56464L11.158 6.13523C11.3595 5.94637 11.6759 5.95657 11.8648 6.15803C12.0536 6.35949 12.0434 6.67591 11.842 6.86477L7.84197 10.6148C7.64964 10.7951 7.35036 10.7951 7.15803 10.6148L3.15803 6.86477C2.95657 6.67591 2.94637 6.35949 3.13523 6.15803Z" fill="currentColor" fillRule="evenodd" clipRule="evenodd"></path>
+                </svg>
+              </span>
+            </summary>
+            
+            <div className="p-4 pt-2 border-t border-border space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="plannedSkips" className="text-xs font-medium">Classes I want to skip</Label>
+                <Input
+                  id="plannedSkips"
+                  type="text"
+                  inputMode="numeric"
+                  placeholder="e.g. 5"
+                  value={formData.plannedSkips}
+                  onChange={handleIntChange("plannedSkips")}
+                  className="bg-background px-2 border-border rounded-none font-mono w-full sm:w-1/2"
+                />
+              </div>
+
+              {plannedSkips > 0 && (
+                <div className="p-4 bg-muted/30 border border-border rounded-none space-y-2">
+                  <div className="flex justify-between items-center mb-1">
+                    <span className="text-xs text-muted-foreground">Projected Percentage</span>
+                    <span className={`text-xl font-bold font-mono ${isFutureAboveTarget ? "text-foreground" : "text-destructive"}`}>
+                      {futurePercentage.toFixed(2)}%
+                    </span>
+                  </div>
+                  
+                  {isFutureAboveTarget ? (
+                    <p className="text-sm font-semibold text-foreground">
+                      You will still be above the {target}% target.
+                    </p>
+                  ) : (
+                    <p className="text-sm font-semibold text-destructive leading-relaxed">
+                      After skipping {plannedSkips}, you will need to attend the next <span className="underline font-bold font-mono">{futureClassesToAttend}</span> classes consecutively to reach {target}%.
+                    </p>
+                  )}
+                </div>
+              )}
+            </div>
+          </details>
+        )}
       </CardContent>
     </Card>
   );
