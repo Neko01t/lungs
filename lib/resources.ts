@@ -18,6 +18,9 @@ export const ResourceData : Resource[] = [
       { name: "TempChat", url: "https://tempchat.org", desc: "Encrypted self-destructing chat" },
       { name: "Cobalt", url: "https://cobalt.tools", desc : "A clean, ad-free tool to download videos and media from various websites."},
       { name: "PDF24", url: "https://tools.pdf24.org", desc : "A free online suite to convert, merge, compress, and edit PDF files easily."},
+      { name: "Photopea", url: "https://www.photopea.com", desc: "Advanced web-based image editor. A completely free, browser-based alternative to Adobe Photoshop." },
+      { name: "TinyWow", url: "https://tinywow.com", desc: "Hundreds of free, uncapped tools for PDF, video, image, and file conversion." },
+      { name: "CyberChef", url: "https://gchq.github.io/CyberChef/", desc: "A 'Swiss Army Knife' web app for encryption, encoding, compression, and data analysis." }
     ],
   },
   {
@@ -28,6 +31,9 @@ export const ResourceData : Resource[] = [
       { name: "freeCodeCamp", url: "https://www.freecodecamp.org", desc: "Interactive coding certifications" },
       { name: "roadmap.sh", url: "https://roadmap.sh", desc: "Community developer roadmaps" },
       { name: "Learn X in Y min", url: "https://learnxinyminutes.com", desc: "Quick syntax guides and code examples to learn new programming languages rapidly." },
+      { name: "MDN Web Docs", url: "https://developer.mozilla.org", desc: "The absolute gold standard for web development documentation, maintained by Mozilla." },
+      { name: "StackBlitz", url: "https://stackblitz.com", desc: "Instant web-based IDE for modern frameworks (React, Next, Vue) that runs entirely in your browser." },
+      { name: "Regex101", url: "https://regex101.com", desc: "Interactive regular expression tester and debugger with real-time explanations of your code." }
     ],
   },
   {
@@ -43,6 +49,15 @@ export const ResourceData : Resource[] = [
     ],
   },
   {
+  category: "Design & Creative",
+  description: "Free tools for UI/UX, vectors, and presentations",
+  links: [
+    { name: "Figma", url: "https://www.figma.com", desc: "Industry-standard collaborative interface design tool. Completely free for students." },
+    { name: "Coolors", url: "https://coolors.co", desc: "A fast, intuitive color palette generator for your web and design projects." },
+    { name: "Lucide", url: "https://lucide.dev", desc: "A beautiful, open-source icon toolkit. A modern alternative to FontAwesome." }
+  ]
+},
+  {
     category : "Study & Academic",
     description: "Tools that is usefull for study",
     links : [
@@ -52,6 +67,10 @@ export const ResourceData : Resource[] = [
       { name: "Unpaywall", url: "https://unpaywall.org", desc: "A browser extension that instantly finds free, legal versions of paywalled academic research papers." },
       { name: "Desmos", url: "https://www.desmos.com", desc: "An advanced online graphing calculator for plotting math equations and exploring functions." },
       { name: "Symbolab", url: "https://www.symbolab.com", desc: "An advanced math solver that shows step-by-step solutions for algebra, calculus, and more." },
+      { name: "Zotero", url: "https://www.zotero.org", desc: "A free, open-source reference manager to collect, organize, annotate, and auto-generate citations." },
+      { name: "Connected Papers", url: "https://www.connectedpapers.com", desc: "Enter a paper and get a visual graph of similar research, making literature reviews incredibly fast." },
+      { name: "Hemingway App", url: "https://hemingwayapp.com", desc: "A text editor that highlights lengthy, complex sentences and passive voice to improve essay clarity." },
+      { name: "Wolfram Alpha", url: "https://www.wolframalpha.com", desc: "A computational intelligence engine. Excellent for high-level math, physics, and data queries." },
       { name: "Att-end", url: "", desc: "Manage your attendance" },
     ]
   },
