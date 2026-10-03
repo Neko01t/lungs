@@ -227,7 +227,7 @@ export default function AdvCalc() {
         </div>
 
         {total > 0 && (
-          <Accordion type="multiple" defaultValue={["generator"]} className="space-y-4">
+          <Accordion className="space-y-4">
             
             <AccordionItem value="projection" className="border border-border bg-background px-4 rounded-none">
               <AccordionTrigger className="text-sm font-medium text-muted-foreground hover:text-foreground hover:no-underline py-4">
