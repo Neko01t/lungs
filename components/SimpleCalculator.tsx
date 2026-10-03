@@ -5,13 +5,15 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 
 export default function SimpCalc() {
-  const [totalClasses, setTotalClasses] = useState("40");
-  const [attendedClasses, setAttendedClasses] = useState("32");
-  const [targetPercentage, setTargetPercentage] = useState("75");
+  const [formData, setFormData] = useState({
+    total: "213",
+    attended: "170",
+    target: "75"
+  });
 
-  const total = Math.max(0, parseInt(totalClasses) || 0);
-  const attended = Math.max(0, Math.min(total, parseInt(attendedClasses) || 0));
-  const target = Math.min(100, Math.max(1, parseFloat(targetPercentage) || 75));
+  const total = Math.max(0, parseInt(formData.total) || 0);
+  const attended = Math.max(0, Math.min(total, parseInt(formData.attended) || 0));
+  const target = Math.min(100, Math.max(1, parseFloat(formData.target) || 75));
   
   const currentPercentage = total > 0 ? (attended / total) * 100 : 0;
   const isAboveTarget = currentPercentage >= target;
@@ -27,18 +29,24 @@ export default function SimpCalc() {
     }
   }
 
-  const handleIntChange = (setter: (val: string) => void) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    setter(e.target.value.replace(/\D/g, ""));
+  const handleIntChange = (field: keyof typeof formData) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: e.target.value.replace(/\D/g, "")
+    }));
   };
 
-  const handleFloatChange = (setter: (val: string) => void) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    setter(e.target.value.replace(/[^0-9.]/g, ""));
+  const handleFloatChange = (field: keyof typeof formData) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: e.target.value.replace(/[^0-9.]/g, "")
+    }));
   };
 
   return (
     <Card className="border-border bg-card text-card-foreground rounded-none">
       <CardHeader>
-        <CardTitle className="text-lg">Quick Calculator</CardTitle>
+        <CardTitle className="text-lg font-michroma">Quick Calculator</CardTitle>
         <CardDescription className="text-xs">
           Calculate current percentage and bunk/recovery allowances.
         </CardDescription>
@@ -52,8 +60,8 @@ export default function SimpCalc() {
               id="total"
               type="text"
               inputMode="numeric"
-              value={totalClasses}
-              onChange={handleIntChange(setTotalClasses)}
+              value={formData.total}
+              onChange={handleIntChange("total")}
               className="bg-background px-2 border-border rounded-none font-mono"
             />
           </div>
@@ -64,8 +72,8 @@ export default function SimpCalc() {
               id="attended"
               type="text"
               inputMode="numeric"
-              value={attendedClasses}
-              onChange={handleIntChange(setAttendedClasses)}
+              value={formData.attended}
+              onChange={handleIntChange("attended")}
               className="bg-background border-border px-2 rounded-none font-mono"
             />
           </div>
@@ -77,15 +85,15 @@ export default function SimpCalc() {
               type="text"
               inputMode="decimal"
               maxLength={5}
-              value={targetPercentage}
-              onChange={handleFloatChange(setTargetPercentage)}
+              value={formData.target}
+              onChange={handleFloatChange("target")}
               className="bg-background border-border px-2 rounded-none font-mono"
             />
           </div>
         </div>
         
         <div className="pt-4 border-t border-border space-y-4">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-background border border-border rounded-none gap-2">
+          <div className="flex flex-col cursor-default sm:flex-row items-start sm:items-center justify-between p-4 bg-background border border-border rounded-none gap-2">
             <div>
               <span className="text-xs text-muted-foreground block">Current Percentage</span>
               <span className="text-3xl font-extrabold tracking-tight font-mono">

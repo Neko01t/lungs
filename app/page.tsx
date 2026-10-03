@@ -35,11 +35,11 @@ export default function AttendancePage() {
       <HeaderSection/>
         <main className="space-y-6">
           <Tabs value={mode} onValueChange={handleModeChange} className="w-full">
-            <TabsList className="grid w-full grid-cols-2 border border-border bg-muted/50 p-1 rounded-none">
-              <TabsTrigger value="simple" className="text-sm font-medium rounded-none">
+            <TabsList className="grid w-full grid-cols-2 border border-border bg-muted/50 rounded-none">
+              <TabsTrigger value="simple" className="text-sm font-medium rounded-none relative -top-[3px]">
                 Simple Mode
               </TabsTrigger>
-              <TabsTrigger value="advance" className="text-sm font-medium rounded-none">
+              <TabsTrigger value="advance" className="text-sm font-medium rounded-none relative -top-[3px]">
                 Advance Mode
               </TabsTrigger>
             </TabsList>

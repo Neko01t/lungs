@@ -15,9 +15,9 @@ export default function HeaderSection(){
   return (
     <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-border pb-6">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
+            <h1 className="text-2xl font-bold  font-orbitron tracking-tight text-foreground flex items-center gap-2">
               <LuCalculator className="h-6 w-6 text-primary" />
-              BunkMate
+              ATT-END 
             </h1>
             <p className="text-xs text-muted-foreground mt-1">
               Attendance Calculator & Student Resource Hub

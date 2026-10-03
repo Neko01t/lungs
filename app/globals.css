@@ -127,3 +127,44 @@
     @apply font-sans;
     }
 }
+
+@font-face {
+  font-family: 'SwingingLondon';
+  src: url('/fonts/swining-london/Swinging London 1966 Circles-COLR.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+.font-swinging-london { font-family: 'SwingingLondon', sans-serif; }
+
+@font-face {
+  font-family: 'BebasNeue';
+  src: url('/fonts/BebasNeue-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+.font-bebas { font-family: 'BebasNeue', sans-serif; }
+
+@font-face {
+  font-family: 'Elsie Swash Caps';
+  src: url('/fonts/elisie/ElsieSwashCaps-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+.font-michroma { font-family: 'Michroma', sans-serif; }
+
+@font-face {
+  font-family: 'Michroma';
+  src: url('/fonts/Michroma-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+.font-orbitron { font-family: 'Orbitron', sans-serif; }
+
+@font-face {
+  font-family: 'Orbitron';
+  src: url('/fonts/Orbitron-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+}
+.font-elsie { font-family: 'Elsie Swash Caps', serif; }
+
