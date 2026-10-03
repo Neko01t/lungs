@@ -52,7 +52,7 @@ export const ResourceData : Resource[] = [
       { name: "Unpaywall", url: "https://unpaywall.org", desc: "A browser extension that instantly finds free, legal versions of paywalled academic research papers." },
       { name: "Desmos", url: "https://www.desmos.com", desc: "An advanced online graphing calculator for plotting math equations and exploring functions." },
       { name: "Symbolab", url: "https://www.symbolab.com", desc: "An advanced math solver that shows step-by-step solutions for algebra, calculus, and more." },
-      { name: "", url: "", desc: "" },
+      { name: "Att-end", url: "", desc: "Manage your attendance" },
     ]
   },
 ]
